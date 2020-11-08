@@ -1,0 +1,46 @@
+
+<html>
+<head>
+    <title>Finstagram Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        html, body, h1, h2, h3, h4, h5, h6 {
+            font-family: "Roboto", sans-serif
+        }
+        h1 {
+        color: #CC9C00
+        }
+    </style>
+</head>
+
+    <body class="w3-light-grey w3-center">
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+        <h1>Login</h1>
+
+        <div>
+            <form action="/loginAuth" method="post">
+                <input type="text" name="username" placeholder="Username" required/>
+                <br/>
+                <input type="password" name="password" placeholder="Password" required/>
+                <br/>
+                <br>
+                <input class="w3-tag w3-amber w3-round" type="submit" value="Login">
+            </form>
+        </div>
+        {% if error %}
+            {{ error }}
+        {% endif %}
+    </body>
+</html>

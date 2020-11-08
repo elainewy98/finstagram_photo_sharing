@@ -1,0 +1,199 @@
+<html>
+<head>
+    <title>Finstagram</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        html, body, h1, h2, h3, h4, h5, h6 {
+            font-family: "Roboto", sans-serif
+        }
+        h3 {
+        color: #CC9C00
+        }
+    </style>
+</head>
+
+<body class="w3-light-grey" w3-center">
+<div class="w3-container w3-amber">
+  <h1> Welcome {{username}}</h1>
+</div>
+
+    <div class="w3-content w3-margin-top" style="max-width:1400px;">
+        <div class="w3-row-padding">
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <link rel="stylesheet" href="assets/css/main.css" />
+
+            <form action="/post" method="POST" enctype = "multipart/form-data" style="background= green; font: 'Arial', sans-serif;\ font-size: 30px;">
+
+                <h3> Post Here </h3>
+                <input type="file" name="upload" accept="image/*"><br/>
+                <input type="text" name="caption" placeholder="Caption" /> </br>
+                <label for="public">To all Followers:</label>
+                <input type="checkbox" name="all_followers" placeholder="" /> </br>
+                <label for="public">Close Friend Group:</label>
+                <select name="closefriendg" id="closefriendg">
+                    {% for line in cfg %}
+                    <option value={{line.groupName}}> {{line.groupName}} </option>
+                    {% endfor %}
+                </select> <br>
+                <input type="submit" value="Upload" /> </br>
+            </form>
+
+            <style type="text/css">
+                table {
+                border-collapse: collapse;
+                }
+                table, th, td {
+                    border: 3px solid white;
+                }
+            </style>
+
+            <h3>Your Close Friend Group</h3>
+
+            <table>
+                <th>Group Name</th>
+                <th>Group Owner</th>
+                <th>Add Friend</th>
+
+                {% for line in cfg %}
+                <tr>
+                    <td>{{line.groupName}}</td>
+                    <td>{{line.groupOwner}}</td>
+
+                    <td>
+                        <form action="/addtocfg" method="POST">
+                            <input type="text" name="username_toadd" placeholder="Friend's Username">
+                            <input type="hidden" name="group" value="{{line.groupName}}">
+                            <input class="w3-tag w3-amber w3-round" type="submit" value="Add">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <h3>Create a Friend Group</h3>
+
+            <form action="/createfg" method="POST">
+                Name: <input type="text" name="name" placeholder="Group Name" required /> </br>
+                <input type="submit" value=Create />
+            </form>
+
+            <h3>Your Feeds</h3>
+
+            <table>
+                <th>photo ID</th>
+                <th>Poster Username</th>
+                <th>Time</th>
+                <th>Caption</th>
+                <th>Tag</th>
+                <th>Detailed Info </th>
+
+                {% for line in posts %}
+                <tr>
+                    <td>{{line.photoID}}</td>
+                    <td>{{line.photoOwner}}</td>
+                    <td>{{line.timestamp}}</td>
+                    <td>{{line.caption}}</td>
+
+                    <td>
+                        <form action="/tag" method="POST">
+                            <input type="hidden" name="photoid" value="{{line.photoID}}">
+                            <input type="text" name="taggee" placeholder="Username">
+                            <input class="w3-tag w3-amber w3-round" type="submit" id="tag_butt" value="Tag">
+
+                        </form>
+
+                    </td>
+
+
+                    <td>
+                        <form action="/detailed_info" method="POST">
+                            <input type="hidden" name="photoid" value="{{line.photoID}}">
+                            <input class="w3-tag w3-amber w3-round" type="submit" id="view_butt" value="View">
+                        </form>
+                    </td>
+
+
+                </tr>
+                {% endfor %}
+
+            </table>
+
+
+            <h3> Manage Tag Requests </h3>
+            <table>
+
+                <th> photo ID </th>
+                <th> Accept </th>
+                <th> Decline </th>
+
+                {% for line in proptags %}
+                <tr>
+                    <td> {{line.photoID}} </td>
+                    <td>
+                        <form action="/accepttag" method="POST">
+                            <input type="hidden" name="photoid" value="{{line.photoID}}">
+                            <input class="w3-tag w3-amber w3-round" type="submit" value="Accept">
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/declinetag" method="POST">
+                            <input type="hidden" name="photoid" value="{{line.photoID}}">
+                            <input class="w3-tag w3-amber w3-round" type="submit" value="Decline">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </table>
+
+            <h3> Follow </h3>
+
+            <form action="/follow" method="POST">
+                Follow this user: <input type="text" name="followee" placeholder="Find Username" required /> </br>
+                <input type="submit" value=Follow />
+            </form>
+
+
+            <h3> Manage Follow Requests </h3>
+            <table>
+                <th> Follower </th>
+                <th> Accept </th>
+                <th> Decline </th>
+
+                {% for line in propfollows %}
+                <tr>
+                    <td> {{line.followerUsername}} </td>
+                    <td>
+                        <form action="/acceptfollow" method="POST">
+                            <input type="hidden" name="followername" value={{line.followerUsername}}>
+                            <input class="w3-tag w3-amber w3-round" type="submit" value="Accept">
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/declinefollow" method="POST">
+                            <input type="hidden" name="followername" value={{line.followerUsername}}>
+                            <input class="w3-tag w3-amber w3-round" type="submit" value="Decline">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </table>
+
+
+            <br>
+            </div>
+        </div>
+
+</body class="w3-light-grey">
+        <footer class="w3-container w3-amber w3-center w3-margin-top"><a href="/logout">Logout</a></footer>
+</html>
+
+
+
+
